@@ -1,0 +1,17 @@
+/.idea/*
+
+# IDEs
+/.idea
+.idea
+.idea/*
+*.iml
+/.vscode
+*~
+.npmrc
+
+node_modules
+dist
+
+# System files
+.DS_Store
+.directory

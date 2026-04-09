@@ -1,0 +1,42 @@
+{
+  "name": "@wundertrading/wundertrading-sdk",
+  "version": "1.0.36",
+  "description": "WunderTrading SDK",
+  "private": false,
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "homepage": "https://wundertrading.com/en",
+  "keywords": [
+    "node",
+    "javascript",
+    "npm",
+    "wundertrading"
+  ],
+  "author": "WunderTrading (https://wundertrading.com/en)",
+  "bugs": {
+    "url": "https://github.com/wundertrading/wundertrading-sdk/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wundertrading/wundertrading-sdk.git"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE.md"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@types/node": "^25.5.0",
+    "axios": "^1.6.0",
+    "crypto-js": "^4.2.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
+    "typescript": "^5.3.0"
+  }
+}
