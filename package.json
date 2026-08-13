@@ -1,12 +1,16 @@
 {
   "name": "@wundertrading/wundertrading-sdk",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "WunderTrading SDK",
   "private": false,
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "homepage": "https://wundertrading.com/en",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wundertrading/wundertrading-sdk.git"
+  },
   "keywords": [
     "node",
     "javascript",
