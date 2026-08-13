@@ -1,0 +1,1 @@
+export const DEFAULT_BASE_URL = "https://wundertrading.com";
