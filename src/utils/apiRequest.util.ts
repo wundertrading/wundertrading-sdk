@@ -4,6 +4,15 @@ export class ApiRequestUtil {
     /**
      * @throws {Error}
      */
+    ensureApiProfileCode(apiProfileCode: any): void {
+        if (!apiProfileCode) {
+            throw new EnsureError("Entry parameter `apiProfileCode` cannot be empty.");
+        }
+    }
+
+    /**
+     * @throws {Error}
+     */
     ensureIdOrClientId(idOrClientId: any): void {
         if (!idOrClientId) {
             throw new EnsureError("Entry parameter `idOrClientId` cannot be empty.");

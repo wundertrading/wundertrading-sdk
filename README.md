@@ -111,6 +111,53 @@ async function example() {
 example();
 ```
 
+### Create new API profile
+
+```javascript
+const {TradingClient, constants} = require("@wundertrading/wundertrading-sdk");
+
+// client instance
+const client = new TradingClient(
+  "API_KEY",
+  "SECRET_KEY"
+);
+
+async function example() {
+    const newProfile = await client.createApiProfile({
+        api: "your_api_key_123",
+        secret: "your_secret_key_123",
+        name: "My-Binance-Profile",
+        exchangeFamily: ["BINANCE"]
+    });
+
+    console.log(newProfile);
+}
+
+example();
+```
+
+### Edit API profile
+
+```javascript
+const {TradingClient, constants} = require("@wundertrading/wundertrading-sdk");
+
+// client instance
+const client = new TradingClient(
+  "API_KEY",
+  "SECRET_KEY"
+);
+
+async function example() {
+    const profile = await client.editApiProfile("master_profile_code", {
+        name: "My-Binance-Profile-2"
+    });
+
+    console.log(profile);
+}
+
+example();
+```
+
 ### Market order trade
 * Trade with 2 API profiles (Binance Futures USDT-M)
 * Exit conditions (examples with percents values):

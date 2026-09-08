@@ -10,6 +10,8 @@ import {
 } from "../models/query/query.model";
 import {PaginatedResponse} from "../responses/paginated.response";
 import {ApiProfile} from "../models/api_profile/apiProfile.model";
+import {ApiProfileUpsertResponse, ApiProfileDeleteResponse} from "../responses/profile/action.model";
+import {ApiProfileCreateRequest, ApiProfileEditRequest} from "../models/api_profile/requests/upsert.model";
 import {Exchange} from "../models/market/exchange.model";
 import {Market} from "../models/market/market.model";
 import {Strategy} from "../models/strategy/strategy.model";
@@ -19,6 +21,10 @@ import {validate} from "../validation/validator";
 import {StrategyTradeSchema} from "../schemas/strategy/trade.schema";
 import {SwingStrategyRequest} from "../models/strategy/requests/swing.model";
 import {StrategySwingSchema} from "../schemas/strategy/swing.schema";
+import {
+    ApiProfileCreateSchema,
+    ApiProfileEditSchema
+} from "../schemas/profile/upsert.schema";
 import {
     PaginationQuerySchema,
     StrategyFindManyQuerySchema,
@@ -53,6 +59,12 @@ export class  TradingClient {
         );
     }
 
+    async getExchangeFamilies(): Promise<String[]> {
+        return this.apiResponseUtil.resolve(
+            this.client.getHttp().get('/open_api/exchanges/families')
+        );
+    }
+
     async getMarkets(params: ExchangesQuery | undefined = undefined): Promise<Record<string, Market[]>> {
         validate(
             ExchangesQuerySchema,
@@ -74,6 +86,40 @@ export class  TradingClient {
 
         const path = this.pathUtil.glueWithQueryParams('/open_api/api_profiles', params);
         return await this.apiResponseUtil.resolve(this.client.getHttp().get(path));
+    }
+
+    async createApiProfile(body: ApiProfileCreateRequest): Promise<ApiProfileUpsertResponse> {
+        validate(
+            ApiProfileCreateSchema,
+            body,
+            this.client.getConfig().validateRequests
+        );
+
+        return await this.apiResponseUtil.resolve(
+            this.client.getHttp().post('/open_api/api_profiles/create', body)
+        );
+    }
+
+    async editApiProfile(apiProfileCode: string, body: ApiProfileEditRequest): Promise<ApiProfileUpsertResponse> {
+        this.apiRequestUtil.ensureApiProfileCode(apiProfileCode);
+
+        validate(
+            ApiProfileEditSchema,
+            body,
+            this.client.getConfig().validateRequests
+        );
+
+        return await this.apiResponseUtil.resolve(
+            this.client.getHttp().patch(`/open_api/api_profiles/${apiProfileCode}/edit`, body)
+        );
+    }
+
+    async deleteApiProfile(apiProfileCode: string): Promise<ApiProfileDeleteResponse> {
+        this.apiRequestUtil.ensureApiProfileCode(apiProfileCode);
+
+        return await this.apiResponseUtil.resolve(
+            this.client.getHttp().delete(`/open_api/api_profiles/${apiProfileCode}/delete`)
+        );
     }
 
     // STRATEGY
