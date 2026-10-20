@@ -2,9 +2,9 @@ import {
     AmountPerTradeType,
     BaseOn,
     ExtraOrderCostAveraging,
-    OrderType,
     TradeSide
 } from "../../../constants/strategy.constants";
+import {EntryOrderTypeRequest, StopLossOrderTypeRequest, TakeProfitOrderTypeRequest} from "./_order_type.model";
 
 export interface TakeProfitRequest {
 
@@ -18,7 +18,7 @@ export interface TakeProfitRequest {
     portfolio: number;
 }
 
-export interface TradeStrategyRequest {
+export interface TradeStrategyRequest extends EntryOrderTypeRequest, TakeProfitOrderTypeRequest, StopLossOrderTypeRequest {
 
     /** Optional client strategy id */
     clientId?: string | null | undefined;
@@ -34,9 +34,6 @@ export interface TradeStrategyRequest {
 
     /** Trade direction */
     side: TradeSide;
-
-    /** Order type */
-    orderType: OrderType;
 
     /** Required for limit order */
     price?: number | null;

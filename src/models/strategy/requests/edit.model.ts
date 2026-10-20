@@ -1,7 +1,8 @@
 import {TakeProfitRequest} from "./trade.model";
 import {BaseOn} from "../../../constants/strategy.constants";
+import {StopLossOrderTypeRequest, TakeProfitOrderTypeRequest} from "./_order_type.model";
 
-interface EditStrategyBaseRequest {
+interface EditStrategyBaseRequest extends TakeProfitOrderTypeRequest, StopLossOrderTypeRequest {
     /** Take profits */
     takeProfits?: TakeProfitRequest[];
 

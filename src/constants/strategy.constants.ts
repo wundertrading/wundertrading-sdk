@@ -10,9 +10,30 @@ export enum Status {
     Failed = 'failed',
 }
 
+export enum StatusLive {
+    New = 'new',
+    Entered = 'entered',
+    Cancelling = 'cancelling',
+    PanicExiting = 'panic_exiting'
+}
+
+export enum StatusHistory {
+    Completed = 'completed',
+    Canceled = 'canceled',
+    PanicExited = 'panic_exited',
+    Unlinked = 'unlinked',
+    Failed = 'failed',
+}
+
+export enum ExitOrderType {
+    Market = 'market',
+    BestBidAskLimit = 'best_bid_ask_limit',
+}
+
 export enum OrderType {
     Market = 'market',
     Limit = 'limit',
+    BestBidAskLimit = 'best_bid_ask_limit',
 }
 
 export enum StrategyGroupType {
@@ -51,4 +72,9 @@ export enum ExtraOrderCostAveraging {
 export enum BaseOn {
     EntryOrder = 'entry_order',
     AveragePrice = 'average_price',
+}
+
+export enum BestBidAskLimitAfterMaxAttemptsReached {
+    Market = 'market',
+    Cancel = 'cancel',
 }

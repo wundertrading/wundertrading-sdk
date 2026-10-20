@@ -1,6 +1,7 @@
 import z from "zod";
 import {EnumLike} from "zod/v4/core/util";
-import {Status as StrategyStatus} from "../constants/strategy.constants";
+import {StatusLive} from "../constants/strategy.constants";
+import {StatusHistory} from "../constants/strategy.constants";
 import {Status as ApiProfileStatus} from "../constants/apiProfile.constants";
 
 // https://zod.dev/?id=table-of-contents
@@ -33,9 +34,16 @@ export const ProfileFindManyQuerySchema = z.object({
     ...getStatusesSchemaField(ApiProfileStatus),
 });
 
-export const StrategyFindManyQuerySchema = z.object({
+export const StrategyLiveFindManyQuerySchema = z.object({
     ...PaginationQuerySchema.shape,
     ...ExchangesQuerySchema.shape,
     ...apiProfilesSchemaField,
-    ...getStatusesSchemaField(StrategyStatus),
+    ...getStatusesSchemaField(StatusLive)
+});
+
+export const StrategyHistoryFindManyQuerySchema = z.object({
+    ...PaginationQuerySchema.shape,
+    ...ExchangesQuerySchema.shape,
+    ...apiProfilesSchemaField,
+    ...getStatusesSchemaField(StatusHistory)
 });

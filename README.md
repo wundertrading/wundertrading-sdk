@@ -239,7 +239,9 @@ async function example() {
       pairCode: "ADAUSDT",
       profilesCodes: ["106eb6a81159384e", "106eb6a8286813f8"],
       side: constants.Strategy.TradeSide.Long,
-      orderType: constants.Strategy.OrderType.Market,
+      orderType: constants.Strategy.OrderType.Limit,
+      price: 0.2,
+      timeToLive: 5,
       amountPerTradeType: constants.Strategy.AmountPerTradeType.Dollar,
       amountPerTrade: 50, // 50$
       // exit conditions
@@ -255,6 +257,74 @@ async function example() {
       extraOrderCount: 5, // 1 entry order + 4 DCA orders
       extraOrderDeviation: 0.01, // 1% price deviation
       extraOrderVolumeMultiplier: 1.2, // multiply next DCA order volume by 1.2
+    }).then(response => response.result);
+    
+    const newStrategy = tradesDetails[0];
+    
+    console.log(newStrategy);
+    console.assert(newStrategy.clientId === clientId);
+    
+    // sleep for 1 second
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    console.log('---------------------- Fetched full strategy --------------------------');
+    const strategy = await client.getStrategyById(clientId);
+    console.log(strategy);
+}
+
+example();
+```
+
+### Best Bid-Ask Limit order trade
+* Simple trade with 2 API profiles (Binance Futures USDT-M)
+* Exit conditions (examples with prices):
+  * 2 Take Profits
+  * Stop Loss
+```javascript
+const {TradingClient, constants} = require("@wundertrading/wundertrading-sdk");
+
+// client instance
+const client = new TradingClient(
+    "API_KEY",
+    "SECRET_KEY"
+);
+
+async function example() {
+    // Your strategy identifier: we recommend using it, since network issues may occur during the strategy trade creation;
+    // however, with the clientId, you will always be able to identify the strategy.
+    const clientId = crypto.randomUUID();
+    
+    const {tradesDetails} = await client.createStrategyTrade({
+      clientId: clientId,
+      exchangeCode: "BINANCE_FUTURES",
+      pairCode: "ADAUSDT",
+      profilesCodes: ["106eb6a81159384e", "106eb6a8286813f8"],
+      side: constants.Strategy.TradeSide.Long,
+      orderType: constants.Strategy.OrderType.BestBidAskLimit,
+      orderTypeSettings: {
+        postOnly: true,
+        maxAttempts: 3,
+        afterMaxAttemptsReached: 'market',
+        maxChaseDistance: 0.01,
+      },
+      takeProfitOrderType: constants.Strategy.ExitOrderType.BestBidAskLimit,
+      takeProfitOrderTypeSettings: {
+        postOnly: true
+      },
+      stopLossOrderType: constants.Strategy.ExitOrderType.BestBidAskLimit,
+      stopLossOrderTypeSettings: {
+        postOnly: false
+      },
+      amountPerTradeType: constants.Strategy.AmountPerTradeType.Dollar,
+      amountPerTrade: 50, // 50$
+      // exit conditions
+      takeProfits: [
+        // sell 40% of opened portfolio when 5% profit reached
+        { priceDeviation: 0.05, portfolio: 0.4 },
+        // sell 60% of opened portfolio when 7% profit reached
+        { priceDeviation: 0.07, portfolio: 0.6 },
+      ],
+      // sell all opened portfolio when 50% loss reached
+      stopLoss: 0.5,
     }).then(response => response.result);
     
     const newStrategy = tradesDetails[0];
@@ -356,6 +426,38 @@ async function example() {
           // DCA settings
           extraOrderCount: 8,
         }
+    ).then(response => response.result);
+}
+
+example();
+```
+
+### Patch edit Classic strategy
+* Edit exit conditions order types to `best_bid_ask_limit`
+```javascript
+const {TradingClient, constants} = require("@wundertrading/wundertrading-sdk");
+
+// client instance
+const client = new TradingClient(
+    "API_KEY",
+    "SECRET_KEY"
+);
+
+async function example() {
+    const idOrclientId = 'your_strategy_client_id_or_id';
+
+    await client.editClassicStrategyTrade(
+            idOrclientId,
+            {
+              takeProfitOrderType: constants.Strategy.ExitOrderType.BestBidAskLimit,
+              takeProfitOrderTypeSettings: {
+                postOnly: false
+              },
+              stopLossOrderType: constants.Strategy.ExitOrderType.BestBidAskLimit,
+              stopLossOrderTypeSettings: {
+                postOnly: false
+              }
+            }
     ).then(response => response.result);
 }
 

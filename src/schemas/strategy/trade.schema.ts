@@ -1,5 +1,6 @@
 import z from "zod";
 import {AmountPerTradeType, OrderType, TradeSide} from "../../constants/strategy.constants";
+import {EntryOrderTypeSchema, StopLossOrderTypeSchema, TakeProfitOrderTypeSchema} from "./_order_type.schema";
 
 // https://zod.dev/?id=table-of-contents
 // validate only mandatory fields
@@ -22,18 +23,17 @@ const refine = (data: any, ctx: any) => {
 };
 
 export const StrategyTradeSchema = z.object({
-    clientId: z.union([
-        z.null(),
-        z.undefined(),
-        z.string().regex(/^[~=\-a-zA-Z0-9]+$/).min(32).max(64)
-    ]),
+    clientId: z.string().min(32).max(64).regex(/^[~=\-a-zA-Z0-9]+$/).nullish(),
     exchangeCode: z.string(),
     pairCode: z.string(),
     profilesCodes: z.string().array().min(1),
     side: z.enum(TradeSide),
-    orderType: z.enum(OrderType),
     price: z.number().positive().optional(),
     timeToLive: z.number().min(5).max(20160).optional(),
     amountPerTrade: z.number().positive(),
     amountPerTradeType: z.enum(AmountPerTradeType),
-}).superRefine(refine);
+})
+    .and(EntryOrderTypeSchema)
+    .and(TakeProfitOrderTypeSchema)
+    .and(StopLossOrderTypeSchema)
+    .superRefine(refine);

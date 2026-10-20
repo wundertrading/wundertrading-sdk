@@ -1,5 +1,6 @@
 import z from "zod";
 import {BaseOn} from "../../constants/strategy.constants";
+import {StopLossOrderTypeSchema, TakeProfitOrderTypeSchema} from "./_order_type.schema";
 
 // https://zod.dev/?id=table-of-contents
 // validate only mandatory fields
@@ -25,7 +26,9 @@ const baseShape = {
 export const StrategyEditClassicSchema = z.object({
     ...baseShape,
     placeConditionalOrdersOnExchange: z.boolean().optional(),
-});
+})
+    .and(TakeProfitOrderTypeSchema)
+    .and(StopLossOrderTypeSchema);
 
 export const StrategyEditDcaSchema = z.object({
     ...baseShape,
@@ -36,4 +39,6 @@ export const StrategyEditDcaSchema = z.object({
         z.null(),
         z.number().finite().gt(0)
     ]).optional(),
-});
+})
+    .and(TakeProfitOrderTypeSchema)
+    .and(StopLossOrderTypeSchema);
